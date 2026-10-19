@@ -12,65 +12,41 @@
 </head>
 
 <body>
-    <div class="page">
-        <header class="header">
-            <a class="brand" href="./" aria-label="此刻首页"><span class="brand-icon" aria-hidden="true"></span>此刻<span
-                    class="brand-en">MOMENT</span></a>
-            <span class="status"><span class="status-dot"></span>本地时间</span>
-        </header>
-
-        <main>
-            <div class="intro">
-                <p class="eyebrow">RIGHT HERE, RIGHT NOW</p>
-                <h1>每一刻，都刚刚好。</h1>
-                <p class="intro-note">慢一点，让时间清晰可见。</p>
+    <main class="page">
+        <section class="clock-panel" aria-label="本地时钟">
+            <div class="clock-main">
+                <div class="panel-top">
+                    <span class="small-label" id="greeting">此刻时间</span>
+                    <div class="format-control" role="group" aria-label="时间格式">
+                        <button type="button" data-format="24" aria-pressed="true">24 小时</button>
+                        <button type="button" data-format="12" aria-pressed="false">12 小时</button>
+                    </div>
+                </div>
+                <div class="time-wrap">
+                    <span class="period" id="period" hidden></span>
+                    <time id="time" class="time" aria-label="正在读取本地时间">
+                        <span id="hours">--</span><span class="colon">:</span><span id="minutes">--</span>
+                    </time>
+                    <div class="seconds-group" aria-hidden="true"><span id="seconds">--</span><span
+                            class="seconds-label">SEC</span></div>
+                </div>
+                <div class="clock-bottom"><span class="live"><i aria-hidden="true"></i>随设备时间实时更新</span><span
+                        id="utc-offset">UTC</span></div>
             </div>
-            <section class="clock-panel" aria-label="本地时钟">
-                <div class="clock-main">
-                    <div class="panel-top">
-                        <span class="small-label" id="greeting">此刻时间</span>
-                        <div class="format-control" role="group" aria-label="时间格式">
-                            <button type="button" data-format="24" aria-pressed="true">24 小时</button>
-                            <button type="button" data-format="12" aria-pressed="false">12 小时</button>
-                        </div>
-                    </div>
-                    <div class="time-wrap">
-                        <span class="period" id="period" hidden></span>
-                        <time id="time" class="time" aria-label="正在读取本地时间">
-                            <span id="hours">--</span><span class="colon">:</span><span id="minutes">--</span>
-                        </time>
-                        <div class="seconds-group" aria-hidden="true"><span id="seconds">--</span><span
-                                class="seconds-label">SEC</span></div>
-                    </div>
-                    <div class="clock-bottom"><span class="live"><i aria-hidden="true"></i>随设备时间实时更新</span><span
-                            id="utc-offset">UTC</span></div>
-                </div>
-                <div class="calendar">
-                    <div class="calendar-heading"><span class="small-label">今天</span><span class="calendar-icon"
-                            aria-hidden="true"></span></div>
-                    <time id="date" class="date"><span id="month-year">正在读取日期</span><strong id="day">--</strong><span
-                            id="weekday">星期 —</span></time>
-                    <p class="lunar-date" id="lunar-date">正在读取农历</p>
-                    <div class="calendar-foot" id="day-of-year">每一天，都是新的一页。</div>
-                </div>
-            </section>
-
-            <section class="day-panel" aria-label="今日进度">
-                <div class="day-heading"><span>今天的脚步</span><span><strong id="day-percent">0</strong><span
-                            class="percent-symbol">%</span></span></div>
-                <div class="day-track" role="progressbar" aria-label="今日已过时间" aria-valuemin="0" aria-valuemax="100"
-                    aria-valuenow="0" id="day-meter">
-                    <div id="day-progress"></div>
-                </div>
-                <div class="day-labels"><span>00:00</span><span>好好度过，眼前这一刻。</span><span>24:00</span></div>
-            </section>
-            <noscript>
-                <p class="notice">请开启浏览器 JavaScript，以显示实时本地时间。</p>
-            </noscript>
-        </main>
-        <footer><span>时间来自你的设备，无需定位权限</span><span class="footer-mark">只在此刻 <span aria-hidden="true">✳</span></span>
-        </footer>
-    </div>
+            <div class="calendar">
+                <div class="calendar-heading"><span class="small-label">今天</span><span class="calendar-icon"
+                        aria-hidden="true"></span></div>
+                <time id="date" class="date"><span id="month-year">正在读取日期</span><strong id="day">--</strong><span
+                        id="weekday">星期 —</span></time>
+                <p class="lunar-date" id="lunar-date">正在读取农历</p>
+                <p class="day-note" id="day-note">正在读取节气与节日</p>
+                <div class="calendar-foot" id="day-of-year">每一天，都是新的一页。</div>
+            </div>
+        </section>
+        <noscript>
+            <p class="notice">请开启浏览器 JavaScript，以显示实时本地时间。</p>
+        </noscript>
+    </main>
 </body>
 
 </html>
