@@ -109,10 +109,10 @@ button:focus-visible {
 
 .time {
     font-family: "Bahnschrift", "DIN Alternate", "Trebuchet MS", sans-serif;
-    font-size: clamp(72px, 10.4vw, 126px);
+    font-size: clamp(84px, 12.5vw, 150px);
     font-weight: 300;
     font-variant-numeric: tabular-nums;
-    letter-spacing: -5px;
+    letter-spacing: -6px;
     line-height: 1.08;
     white-space: nowrap;
 }
@@ -277,8 +277,8 @@ button:focus-visible {
     }
 
     .time {
-        font-size: clamp(65px, 19vw, 114px);
-        letter-spacing: -4px;
+        font-size: clamp(72px, 22vw, 128px);
+        letter-spacing: -5px;
     }
 
     .time-wrap {
@@ -392,6 +392,104 @@ button:focus-visible {
 
     .time-wrap {
         gap: 6px;
+    }
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+    .page {
+        padding: 12px 16px;
+    }
+
+    .clock-panel {
+        grid-template-columns: minmax(0, 1fr) 190px;
+        border-radius: 14px;
+    }
+
+    .clock-main {
+        padding: 16px 20px 12px;
+    }
+
+    .time-wrap {
+        padding: 12px 0 10px;
+        gap: 10px;
+    }
+
+    .time {
+        font-size: min(24vw, 50vh, 210px);
+        letter-spacing: -7px;
+    }
+
+    .seconds-group {
+        font-size: 26px;
+        min-width: 30px;
+    }
+
+    .clock-bottom {
+        padding-top: 10px;
+        font-size: 9px;
+    }
+
+    .calendar {
+        display: flex;
+        flex-direction: column;
+        padding: 16px 18px 12px;
+        border-top: 0;
+        border-left: 1px solid var(--line);
+    }
+
+    .date {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 8px;
+    }
+
+    #day {
+        grid-column: auto;
+        grid-row: auto;
+        font-size: 62px;
+        line-height: 1.1;
+        margin: 2px 0;
+        letter-spacing: -2px;
+    }
+
+    #month-year,
+    #weekday {
+        grid-column: auto;
+        grid-row: auto;
+    }
+
+    #weekday {
+        font-size: 12px;
+        letter-spacing: 3px;
+        padding-top: 0;
+    }
+
+    .lunar-date {
+        grid-column: auto;
+        grid-row: auto;
+        margin: 6px 0 4px;
+        text-align: center;
+        font-size: 12px;
+    }
+
+    .day-note {
+        grid-column: auto;
+        grid-row: auto;
+        margin: 0 0 8px;
+        min-height: 13px;
+        text-align: center;
+        font-size: 9px;
+    }
+
+    .calendar-foot {
+        grid-column: auto;
+        grid-row: auto;
+        border-top: 1px solid #d2d9c7;
+        margin-top: auto;
+        padding-top: 8px;
+        text-align: center;
+        font-size: 9px;
     }
 }
 
