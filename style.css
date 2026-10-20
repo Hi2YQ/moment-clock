@@ -85,7 +85,7 @@ button {
 
 .clock-main {
     background: var(--card);
-    padding: 29px 32px 23px;
+    padding: 28px;
     min-width: 0;
 }
 
@@ -263,7 +263,7 @@ button:focus-visible {
 
 .calendar {
     background: var(--calendar);
-    padding: 31px 28px 23px;
+    padding: 28px;
     border-left: 1px solid var(--line);
     display: flex;
     flex-direction: column;
@@ -322,7 +322,7 @@ button:focus-visible {
     margin: -6px 0 16px;
     min-height: 15px;
     text-align: center;
-    font-size: 10px;
+    font-size: 11px;
     line-height: 1.5;
     letter-spacing: .4px;
     color: var(--note);
@@ -396,7 +396,7 @@ button:focus-visible {
     .calendar {
         border-left: 0;
         border-top: 1px solid var(--line);
-        padding: 18px 20px;
+        padding: 20px;
         display: grid;
         grid-template-columns: 1fr auto;
         gap: 12px;
@@ -426,13 +426,13 @@ button:focus-visible {
         grid-column: 2;
         grid-row: 1;
         align-self: end;
-        font-size: 11px;
+        font-size: 14px;
     }
 
     #weekday {
         grid-column: 2;
         grid-row: 2;
-        font-size: 12px;
+        font-size: 14px;
         letter-spacing: 2px;
         padding-top: 6px;
     }
@@ -449,7 +449,7 @@ button:focus-visible {
         grid-row: 4;
         margin: 0;
         text-align: left;
-        font-size: 9px;
+        font-size: 11px;
     }
 
     .calendar-foot {
@@ -506,24 +506,26 @@ button:focus-visible {
 
 @media (orientation: landscape) and (max-height: 500px) {
     .page {
-        padding-top: max(12px, calc(env(safe-area-inset-top, 0px) + 8px));
-        padding-right: max(16px, calc(env(safe-area-inset-right, 0px) + 8px));
-        padding-bottom: max(12px, calc(env(safe-area-inset-bottom, 0px) + 8px));
-        padding-left: max(16px, calc(env(safe-area-inset-left, 0px) + 8px));
+        padding: 16px;
     }
 
     .clock-panel {
         grid-template-columns: minmax(0, 1fr) 190px;
+        height: calc(100svh - 32px);
         border-radius: 14px;
     }
 
     .clock-main {
-        padding: 16px 20px 12px;
+        padding: 16px;
+        padding-left: max(16px, calc(env(safe-area-inset-left, 0px) + 8px - 16px));
+        display: flex;
+        flex-direction: column;
     }
 
     .time-wrap {
         padding: 12px 0 10px;
         gap: 10px;
+        margin-block: auto;
     }
 
     .theme-toggle {
@@ -551,7 +553,8 @@ button:focus-visible {
         display: flex;
         flex-direction: column;
         gap: 12px;
-        padding: 16px 18px 12px;
+        padding: 16px;
+        padding-right: max(16px, calc(env(safe-area-inset-right, 0px) + 8px - 16px));
         border-top: 0;
         border-left: 1px solid var(--line);
     }
@@ -580,7 +583,7 @@ button:focus-visible {
     }
 
     #weekday {
-        font-size: 12px;
+        font-size: 14px;
         letter-spacing: 3px;
         padding-top: 8px;
     }
@@ -599,7 +602,7 @@ button:focus-visible {
         margin: 0 0 8px;
         min-height: 13px;
         text-align: center;
-        font-size: 9px;
+        font-size: 11px;
     }
 
     .calendar-foot {
@@ -615,12 +618,23 @@ button:focus-visible {
 }
 
 @media (orientation: landscape) and (max-height: 500px) and (max-width: 620px) {
+    .page {
+        padding: 12px;
+    }
+
     .clock-panel {
         grid-template-columns: minmax(0, 1fr) 170px;
+        height: calc(100svh - 24px);
     }
 
     .clock-main {
-        padding: 14px 16px 10px;
+        padding: 14px;
+        padding-left: max(14px, calc(env(safe-area-inset-left, 0px) + 8px - 12px));
+    }
+
+    .calendar {
+        padding: 14px;
+        padding-right: max(14px, calc(env(safe-area-inset-right, 0px) + 8px - 12px));
     }
 
     .time {
@@ -648,6 +662,16 @@ button:focus-visible {
     }
 
     .small-label {
+        font-size: 11px;
+    }
+}
+
+@media (orientation: landscape) and (max-height: 500px) and (min-width: 800px) {
+    .clock-panel {
+        grid-template-columns: minmax(0, 1fr) 210px;
+    }
+
+    .lunar-date {
         font-size: 11px;
     }
 }
