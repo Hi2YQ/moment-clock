@@ -5,6 +5,10 @@
     const pad = (number) => String(number).padStart(2, "0");
     const weekdays = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
     const buttons = document.querySelectorAll("[data-format]");
+    const themeButton = byId("theme-toggle");
+    const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+    const statusBarMeta = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
+    let theme = document.documentElement.dataset.theme === "dark" ? "dark" : "light";
     const RAD = Math.PI / 180;
     const SOLAR_TERMS = [
         { name: "小寒", longitude: 285, month: 0, day: 5 },
@@ -299,6 +303,19 @@
         });
     }
 
+    function applyTheme(nextTheme) {
+        theme = nextTheme;
+        document.documentElement.dataset.theme = nextTheme;
+        themeButton.setAttribute("aria-pressed", String(nextTheme === "dark"));
+        themeButton.setAttribute("aria-label", nextTheme === "dark" ? "切换浅色背景" : "切换黑色背景");
+        if (themeColorMeta) {
+            themeColorMeta.setAttribute("content", nextTheme === "dark" ? "#080a09" : "#f4f1e9");
+        }
+        if (statusBarMeta) {
+            statusBarMeta.setAttribute("content", nextTheme === "dark" ? "black-translucent" : "default");
+        }
+    }
+
     function render() {
         const now = new Date();
         const hours = now.getHours();
@@ -348,9 +365,15 @@
             tick();
         });
     });
+    themeButton.addEventListener("click", () => {
+        const nextTheme = theme === "dark" ? "light" : "dark";
+        applyTheme(nextTheme);
+        try { localStorage.setItem("moment-theme", nextTheme); } catch (_) { }
+    });
     document.addEventListener("visibilitychange", tick);
     window.addEventListener("pageshow", tick);
     window.addEventListener("focus", tick);
+    applyTheme(theme);
     updateButtons();
     tick();
 })();
