@@ -330,6 +330,7 @@ button:focus-visible {
 
 .day-note.is-today {
     color: var(--note-today);
+    font-size: 15px;
     font-weight: 500;
 }
 

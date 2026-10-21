@@ -36,11 +36,6 @@
         { name: "大雪", longitude: 255, month: 11, day: 7 },
         { name: "冬至", longitude: 270, month: 11, day: 22 },
     ];
-    const LUNAR_MONTHS = {
-        "正月": 1, "二月": 2, "三月": 3, "四月": 4, "五月": 5, "六月": 6,
-        "七月": 7, "八月": 8, "九月": 9, "十月": 10, "十一月": 11, "十二月": 12,
-        "冬月": 11, "腊月": 12,
-    };
     const LUNAR_FESTIVALS = {
         "1-15": ["元宵节"],
         "2-2": ["龙抬头"],
@@ -82,60 +77,37 @@
     ]);
     let format = "24";
     let timer;
-    let lunarFormatter;
     const lunarCache = new Map();
     const solarTermCache = new Map();
     let nextEventCacheKey = "";
     let nextEventCacheValue = null;
-
-    try {
-        lunarFormatter = new Intl.DateTimeFormat("zh-CN-u-ca-chinese", {
-            year: "numeric", month: "long", day: "numeric", timeZone: "UTC",
-        });
-        if (lunarFormatter.resolvedOptions().calendar !== "chinese") lunarFormatter = null;
-    } catch (_) {
-        lunarFormatter = null;
-    }
 
     function dateKey(date) {
         return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
     }
 
     function getLunarParts(date) {
-        if (!lunarFormatter) return null;
         const key = dateKey(date);
         if (lunarCache.has(key)) return lunarCache.get(key);
+        let lunar = null;
         try {
-            // 将设备当地年月日映射到固定时区，避免农历与本地公历跨日错位。
-            const localDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 12));
-            const parts = lunarFormatter.formatToParts(localDate);
-            const part = (type) => (parts.find((item) => item.type === type) || {}).value;
-            const day = Number(part("day"));
-            const year = part("yearName") || part("relatedYear");
-            const monthName = part("month") || "";
-            const month = LUNAR_MONTHS[monthName.replace(/^闰/, "")] || 0;
-            const result = year && monthName && Number.isInteger(day) && day >= 1 && day <= 30
-                ? { year, monthName, month, day }
+            lunar = window.LunarCalendar
+                ? window.LunarCalendar.toLunar(date.getFullYear(), date.getMonth() + 1, date.getDate())
                 : null;
-            lunarCache.set(key, result);
-            return result;
         } catch (_) {
-            lunarCache.set(key, null);
-            return null;
+            lunar = null;
         }
+        lunarCache.set(key, lunar);
+        return lunar;
     }
 
     function renderLunarDate(now) {
         const lunar = getLunarParts(now);
         if (!lunar) {
-            byId("lunar-date").textContent = "当前浏览器暂不支持农历";
+            byId("lunar-date").textContent = "农历数据暂不可用";
             return null;
         }
-        const digits = "一二三四五六七八九";
-        const day = lunar.day;
-        const dayName = day === 10 ? "初十" : day === 20 ? "二十" : day === 30 ? "三十"
-            : `${day < 10 ? "初" : day < 20 ? "十" : "廿"}${digits[(day - 1) % 10]}`;
-        byId("lunar-date").textContent = `农历 ${lunar.year}年${lunar.monthName}${dayName}`;
+        byId("lunar-date").textContent = `农历 ${lunar.yearName}年${lunar.monthName}${lunar.dayName}`;
         return lunar;
     }
 
@@ -199,7 +171,7 @@
         if (month === 5 && day === nthWeekdayOfMonth(now.getFullYear(), 4, 0, 2)) names.push("母亲节");
         if (month === 6 && day === nthWeekdayOfMonth(now.getFullYear(), 5, 0, 3)) names.push("父亲节");
         if (month === 11 && day === nthWeekdayOfMonth(now.getFullYear(), 10, 4, 4)) names.push("感恩节");
-        if (lunar) {
+        if (lunar && !lunar.isLeap) {
             if (lunar.month === 12 && isLunarNewYearEve(now)) names.push("除夕");
             if (lunar.month === 1 && lunar.day >= 1 && lunar.day <= 3) names.push("春节");
             const lunarNames = LUNAR_FESTIVALS[`${lunar.month}-${lunar.day}`];
