@@ -107,7 +107,7 @@
             byId("lunar-date").textContent = "农历数据暂不可用";
             return null;
         }
-        byId("lunar-date").textContent = `农历 ${lunar.yearName}年${lunar.monthName}${lunar.dayName}`;
+        byId("lunar-date").textContent = `${lunar.yearName}年 · ${lunar.monthName}${lunar.dayName}`;
         return lunar;
     }
 
@@ -257,9 +257,8 @@
         if (next.term && !next.festivals.some((name) => name.includes(next.term.name))) {
             events.push({ text: next.term.name, traditional: false });
         }
-        const prefix = next.festivals.length ? "下个节日" : "下个节气";
         const suffix = `${next.date.getMonth() + 1}月${next.date.getDate()}日`;
-        renderNote(events, prefix, suffix);
+        renderNote(events, "", suffix);
         note.classList.remove("is-today");
     }
 
