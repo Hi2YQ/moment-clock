@@ -65,10 +65,7 @@ button {
     width: min(1060px, 100%);
     min-height: 100svh;
     margin: 0 auto;
-    padding-top: max(32px, calc(env(safe-area-inset-top, 0px) + 8px));
-    padding-right: max(42px, calc(env(safe-area-inset-right, 0px) + 8px));
-    padding-bottom: max(32px, calc(env(safe-area-inset-bottom, 0px) + 8px));
-    padding-left: max(42px, calc(env(safe-area-inset-left, 0px) + 8px));
+    padding: 32px 42px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -372,10 +369,7 @@ button:focus-visible {
     }
 
     .clock-main {
-        padding-top: max(20px, calc(env(safe-area-inset-top, 0px) + 8px));
-        padding-right: max(20px, calc(env(safe-area-inset-right, 0px) + 8px));
-        padding-bottom: 20px;
-        padding-left: max(20px, calc(env(safe-area-inset-left, 0px) + 8px));
+        padding: 20px;
         display: flex;
         flex-direction: column;
     }
@@ -409,10 +403,7 @@ button:focus-visible {
     .calendar {
         border-left: 0;
         border-top: 1px solid var(--line);
-        padding-top: 20px;
-        padding-right: max(20px, calc(env(safe-area-inset-right, 0px) + 8px));
-        padding-bottom: max(20px, calc(env(safe-area-inset-bottom, 0px) + 8px));
-        padding-left: max(20px, calc(env(safe-area-inset-left, 0px) + 8px));
+        padding: 20px;
         display: grid;
         grid-template-columns: 1fr auto;
         gap: 12px;
@@ -544,9 +535,6 @@ button:focus-visible {
 
     .clock-main {
         padding: 16px;
-        padding-top: max(16px, calc(env(safe-area-inset-top, 0px) + 8px));
-        padding-left: max(16px, calc(env(safe-area-inset-left, 0px) + 8px));
-        padding-bottom: max(16px, calc(env(safe-area-inset-bottom, 0px) + 8px));
         display: flex;
         flex-direction: column;
     }
@@ -583,9 +571,6 @@ button:focus-visible {
         flex-direction: column;
         gap: 12px;
         padding: 16px;
-        padding-top: max(16px, calc(env(safe-area-inset-top, 0px) + 8px));
-        padding-right: max(16px, calc(env(safe-area-inset-right, 0px) + 8px));
-        padding-bottom: max(16px, calc(env(safe-area-inset-bottom, 0px) + 8px));
         border-top: 0;
         border-left: 1px solid var(--line);
     }
@@ -661,17 +646,11 @@ button:focus-visible {
 
     .clock-main {
         padding: 14px;
-        padding-top: max(14px, calc(env(safe-area-inset-top, 0px) + 8px));
-        padding-left: max(14px, calc(env(safe-area-inset-left, 0px) + 8px));
-        padding-bottom: max(14px, calc(env(safe-area-inset-bottom, 0px) + 8px));
     }
 
     .calendar {
         gap: 6px;
         padding: 10px;
-        padding-top: max(10px, calc(env(safe-area-inset-top, 0px) + 8px));
-        padding-right: max(10px, calc(env(safe-area-inset-right, 0px) + 8px));
-        padding-bottom: max(10px, calc(env(safe-area-inset-bottom, 0px) + 8px));
     }
 
     .date {
