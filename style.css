@@ -46,8 +46,8 @@ html[data-theme="dark"] {
     --shadow: 0 14px 30px -26px #000000cc;
 }
 
-html[data-theme="dark"] body {
-    /* 深色主题整体再降低 20% 亮度。 */
+html[data-theme="dark"].is-night-dim body {
+    /* 深色主题仅在夜间时段再降低 20% 亮度。 */
     filter: brightness(0.8);
 }
 

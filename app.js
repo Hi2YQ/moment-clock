@@ -305,7 +305,7 @@
     function updateNightDim(now) {
         // 使用设备本地时间判断夜间时段：22:00 至次日 07:00。
         const hour = now.getHours();
-        document.documentElement.classList.toggle("is-night-dim", hour >= 22 || hour < 7);
+        document.documentElement.classList.toggle("is-night-dim", hour >= 21 || hour < 7);
     }
 
     function render() {
