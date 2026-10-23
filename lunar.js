@@ -1,6 +1,8 @@
 (() => {
     "use strict";
 
+    // 农历转换模块：提供 1900–2100 年公历转农历，不依赖 Intl/ICU。
+    // 对外接口：window.LunarCalendar.toLunar(year, month, day)。
     // 1900–2100 年农历数据，每个年份用一个整数压缩存储。
     // 低 4 位：闰月月份，0 表示无闰月。
     // bit 16：闰月天数，1=30 天，0=29 天。
@@ -34,6 +36,7 @@
     const DAY_DIGITS = "一二三四五六七八九";
 
     function leapMonth(year) {
+        // 低 4 位记录闰月月份，0 表示该年没有闰月。
         return LUNAR_INFO[year - 1900] & 0xf;
     }
 
@@ -47,6 +50,7 @@
     }
 
     function lunarYearDays(year) {
+        // 348 天是 12 个 29 天月份的总和，再补上所有 30 天月份的额外一天。
         let days = 348;
         for (let bit = 0x8000; bit > 0x8; bit >>= 1) {
             if (LUNAR_INFO[year - 1900] & bit) days += 1;
@@ -55,6 +59,7 @@
     }
 
     function monthsOfYear(year) {
+        // 展开成按实际顺序排列的月份列表，闰月紧跟同名的常规月份。
         const leap = leapMonth(year);
         const months = [];
         for (let month = 1; month <= 12; month += 1) {
@@ -75,6 +80,7 @@
     }
 
     function toLunar(year, month, day) {
+        // 以 1900-01-31（农历 1900 年正月初一）为基准按天偏移。
         if (year < 1900 || year > 2100) return null;
 
         const base = Date.UTC(1900, 0, 31);
@@ -82,6 +88,7 @@
         let offset = Math.floor((target - base) / 86400000);
         if (offset < 0) return null;
 
+        // 先逐年扣除天数，再在目标年份内逐月扣除天数。
         let lunarYear = 1900;
         while (lunarYear <= 2100 && offset >= lunarYearDays(lunarYear)) {
             offset -= lunarYearDays(lunarYear);

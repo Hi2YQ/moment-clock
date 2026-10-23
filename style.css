@@ -1,5 +1,6 @@
 @charset "UTF-8";
 
+/* 浅色主题为默认值，所有文字和卡片颜色都通过变量统一控制。 */
 :root {
     color-scheme: light;
     --paper: #f4f1e9;
@@ -22,6 +23,7 @@
     --shadow: 0 14px 30px -26px #48513c55;
 }
 
+/* 深色主题：近黑背景配暖白色时钟数字。 */
 html[data-theme="dark"] {
     color-scheme: dark;
     --paper: #080a09;
@@ -44,6 +46,38 @@ html[data-theme="dark"] {
     --shadow: 0 14px 30px -26px #000000cc;
 }
 
+html[data-theme="dark"] body {
+    /* 深色主题整体再降低 20% 亮度。 */
+    filter: brightness(0.8);
+}
+
+/* 22:00–06:59 降低文字亮度，背景和布局保持不变。 */
+html.is-night-dim {
+    --ink: #20281f;
+    --muted: #5e6559;
+    --accent: #8f432f;
+    --control-text: #555c51;
+    --colon: #8b9385;
+    --calendar-muted: #596254;
+    --live-dot: #526849;
+    --icon: #6b7564;
+    --note: #596254;
+    --note-today: #4f5a4a;
+}
+
+html[data-theme="dark"].is-night-dim {
+    --ink: #c7c4b8;
+    --muted: #8d9387;
+    --accent: #b67963;
+    --control-text: #979d90;
+    --colon: #596056;
+    --calendar-muted: #8d9387;
+    --live-dot: #718662;
+    --icon: #747f6d;
+    --note: #8d9387;
+    --note-today: #a2a79a;
+}
+
 * {
     box-sizing: border-box;
 }
@@ -62,6 +96,7 @@ button {
 }
 
 .page {
+    /* 桌面端居中卡片；手机端会在媒体查询中改为贴边铺满。 */
     width: min(1060px, 100%);
     min-height: 100svh;
     margin: 0 auto;
@@ -72,6 +107,7 @@ button {
 }
 
 .clock-panel {
+    /* 桌面端使用左右分栏，手机端切换为上下布局。 */
     display: grid;
     grid-template-columns: minmax(0, 1fr) 230px;
     border: 1px solid var(--line);
@@ -353,6 +389,7 @@ button:focus-visible {
     color: var(--accent);
 }
 
+/* 手机端：铺满视口，左右不留边距。 */
 @media (max-width: 700px) {
     .page {
         padding: 0;
@@ -503,6 +540,7 @@ button:focus-visible {
     }
 }
 
+/* 竖屏：上下保留呼吸空间，底部天数独占一行。 */
 @media (max-width: 700px) and (orientation: portrait) {
     .calendar-foot {
         grid-column: 1 / -1;
@@ -518,6 +556,7 @@ button:focus-visible {
     }
 }
 
+/* 横屏：时间与日历左右分栏，并铺满可用高度。 */
 @media (orientation: landscape) and (max-height: 500px) {
     .page {
         padding: 0;
@@ -633,6 +672,7 @@ button:focus-visible {
     }
 }
 
+/* 窄横屏：压缩日历间距，避免大字号换行或裁切。 */
 @media (orientation: landscape) and (max-height: 500px) and (max-width: 620px) {
     .page {
         padding: 0;
@@ -702,6 +742,7 @@ button:focus-visible {
     }
 }
 
+/* 宽横屏：日历栏保持原宽度，并微调农历字号。 */
 @media (orientation: landscape) and (max-height: 500px) and (min-width: 800px) {
     .clock-panel {
         grid-template-columns: minmax(0, 1fr) 190px;
@@ -712,6 +753,7 @@ button:focus-visible {
     }
 }
 
+/* 主屏独立模式使用动态视口高度，避免浏览器工具栏收起后留下空白。 */
 @media (display-mode: standalone), (display-mode: fullscreen) {
     .page {
         min-height: 100dvh;

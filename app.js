@@ -10,6 +10,7 @@
     const statusBarMeta = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
     let theme = document.documentElement.dataset.theme === "dark" ? "dark" : "light";
     const RAD = Math.PI / 180;
+    // 24 节气对应太阳黄经每 15° 一个节点；month/day 只是迭代初值。
     const SOLAR_TERMS = [
         { name: "小寒", longitude: 285, month: 0, day: 5 },
         { name: "大寒", longitude: 300, month: 0, day: 20 },
@@ -36,6 +37,7 @@
         { name: "大雪", longitude: 255, month: 11, day: 7 },
         { name: "冬至", longitude: 270, month: 11, day: 22 },
     ];
+    // 农历节日按“月-日”查找，闰月中的同名日期不重复庆祝。
     const LUNAR_FESTIVALS = {
         "1-15": ["元宵节"],
         "2-2": ["龙抬头"],
@@ -52,6 +54,7 @@
         "12-23": ["小年（北方）"],
         "12-24": ["小年（南方）"],
     };
+    // 固定公历日期上的现代节日和法定假日核心日期。
     const SOLAR_FESTIVALS = {
         "1-1": ["元旦"],
         "2-14": ["情人节"],
@@ -70,6 +73,7 @@
         "12-24": ["平安夜"],
         "12-25": ["圣诞节"],
     };
+    // 传统节日使用红色，其余节日使用常规文字颜色。
     const TRADITIONAL_FESTIVALS = new Set([
         "除夕", "春节", "元宵节", "龙抬头", "花朝节", "上巳节", "寒食节",
         "清明节", "端午节", "七夕节", "中元节", "中秋节", "重阳节",
@@ -77,6 +81,7 @@
     ]);
     let format = "24";
     let timer;
+    // 农历、节气和下一个事件都按日期/年份缓存，避免每秒重复计算。
     const lunarCache = new Map();
     const solarTermCache = new Map();
     let nextEventCacheKey = "";
@@ -87,6 +92,7 @@
     }
 
     function getLunarParts(date) {
+        // 农历数据由 lunar.js 内置表计算，不依赖浏览器 Intl 日历支持。
         const key = dateKey(date);
         if (lunarCache.has(key)) return lunarCache.get(key);
         let lunar = null;
@@ -116,6 +122,7 @@
     }
 
     function sunLongitude(julian) {
+        // 低精度太阳视黄经公式，误差足够用于确定节气的公历日期。
         const t = (julian - 2451545.0) / 36525;
         const meanLongitude = 280.46646 + 36000.76983 * t + 0.0003032 * t * t;
         const meanAnomaly = 357.52911 + 35999.05029 * t - 0.0001537 * t * t;
@@ -129,6 +136,7 @@
     }
 
     function solarTermDate(year, term) {
+        // 从近似日期出发做牛顿迭代，求出太阳到达目标黄经的时刻。
         let julian = julianDay(Date.UTC(year, term.month, term.day, 12));
         for (let index = 0; index < 8; index += 1) {
             const difference = ((term.longitude - sunLongitude(julian) + 540) % 360) - 180;
@@ -150,6 +158,7 @@
     }
 
     function isLunarNewYearEve(now) {
+        // 明天是农历正月初一，则今天为除夕。
         const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
         const lunar = getLunarParts(tomorrow);
         return Boolean(lunar && lunar.month === 1 && lunar.day === 1);
@@ -162,6 +171,7 @@
     }
 
     function festivalNames(now, lunar, todayTerm, terms) {
+        // 汇总公历节日、农历节日、节气以及按星期计算的节日。
         const names = [];
         const month = now.getMonth() + 1;
         const day = now.getDate();
@@ -184,6 +194,7 @@
     }
 
     function getDayEvents(date) {
+        // 把某一天的节气、农历和节日整理成统一快照。
         const key = dateKey(date);
         const terms = getSolarTerms(date.getFullYear());
         const term = terms.find((item) => item.key === key) || null;
@@ -193,6 +204,7 @@
     }
 
     function getNextEvent(now) {
+        // 从明天开始顺序查找，最近的节气或节日即为下一次提示。
         const today = dateKey(now);
         if (nextEventCacheKey === today) return nextEventCacheValue;
         let result = null;
@@ -210,6 +222,7 @@
     }
 
     function renderNote(events, prefix = "", suffix = "") {
+        // 传统节日单独着色，日期作为同一行的后缀显示。
         const note = byId("day-note");
         note.replaceChildren();
         if (prefix) note.append(prefix, " ");
@@ -224,6 +237,7 @@
     }
 
     function renderDayExtras(now, lunar) {
+        // 当天有事件就显示当天内容，否则显示下一个最近事件。
         const note = byId("day-note");
         const today = dateKey(now);
         const terms = getSolarTerms(now.getFullYear());
@@ -275,6 +289,7 @@
     }
 
     function applyTheme(nextTheme) {
+        // 同步页面主题、浏览器主题色和 iOS 状态栏样式。
         theme = nextTheme;
         document.documentElement.dataset.theme = nextTheme;
         themeButton.setAttribute("aria-pressed", String(nextTheme === "dark"));
@@ -287,8 +302,16 @@
         }
     }
 
+    function updateNightDim(now) {
+        // 使用设备本地时间判断夜间时段：22:00 至次日 07:00。
+        const hour = now.getHours();
+        document.documentElement.classList.toggle("is-night-dim", hour >= 22 || hour < 7);
+    }
+
     function render() {
+        // 每次渲染都重新读取设备时间，避免后台休眠造成计时漂移。
         const now = new Date();
+        updateNightDim(now);
         const hours = now.getHours();
         const minutes = now.getMinutes();
         const seconds = now.getSeconds();

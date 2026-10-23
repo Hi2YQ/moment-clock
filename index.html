@@ -7,6 +7,7 @@
     <meta name="theme-color" content="#f4f1e9">
     <meta name="description" content="此刻，一个简洁的本地时钟。实时显示手机的时间、日期与星期。">
     <title>此刻 · 本地时钟</title>
+    <!-- PWA 与 iPhone 主屏启动配置 -->
     <link rel="manifest" href="manifest.webmanifest">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
@@ -15,6 +16,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
     <link rel="icon" href="icons/icon-192.png" type="image/png">
     <script>
+        // 在样式加载前恢复主题和夜间状态，避免首屏颜色闪烁。
         (() => {
             let darkTheme = false;
             try {
@@ -22,6 +24,10 @@
             } catch (_) { }
             if (darkTheme) {
                 document.documentElement.dataset.theme = "dark";
+            }
+            const hour = new Date().getHours();
+            if (hour >= 22 || hour < 7) {
+                document.documentElement.classList.add("is-night-dim");
             }
             const statusBar = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
             if (statusBar) statusBar.setAttribute("content", darkTheme ? "black-translucent" : "default");
@@ -34,7 +40,9 @@
 
 <body>
     <main class="page">
+        <!-- 整张卡片在手机端铺满视口，在桌面端居中显示 -->
         <section class="clock-panel" aria-label="本地时钟">
+            <!-- 左侧：实时时间 -->
             <div class="clock-main">
                 <div class="panel-top">
                     <span class="small-label" id="greeting">此刻时间</span>
@@ -66,6 +74,7 @@
                 <div class="clock-bottom"><span class="live"><i aria-hidden="true"></i>随设备时间实时更新</span><span
                         id="utc-offset">UTC</span></div>
             </div>
+            <!-- 右侧：日期、农历、节气与节日 -->
             <div class="calendar">
                 <div class="calendar-heading"><span class="small-label">今天</span><span class="calendar-icon"
                         aria-hidden="true"></span></div>
